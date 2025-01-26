@@ -1,0 +1,85 @@
+{% load static %}
+{% load bootstrap5 %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo_trl.svg'%}">
+    <title>Calculadora TRL/CRL</title>
+  </head>
+<body>
+<main>
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <h1 class="card-title text-center fw-bold">Error {{tipo}}</h1>
+            <hr class="community-divider">
+            {% if tipo == "de CRSF" %}
+              <p class="card-text">El formulario ha sido rechazado por intentar realizar una operación no segura.</strong></p>
+            {% endif %}
+            {% if tipo == "404" %}
+              <p class="card-text">La direccion solicitada es incorrecta</strong></p>
+            {% endif %}
+            {% if tipo == "500" %}
+              <p class="card-text"></strong>Error interno del servidor</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+      {% if tipo == "de CRSF" %}
+        <a onclick="history.back()" class="btn btn-primary">Volver</a>
+      {% else %}
+        <a href="{% url 'seleccionar_modelo' %}" class="btn btn-primary">Continuar</a>
+      {% endif %}
+    </div>
+    <br>
+
+</div>
+</main>
+</body>
+</html>
+<style>
+  body {
+    margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main{
+    flex: 1;
+  }
+
+  .member-item{
+    margin-bottom: 2px;
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.author-info {
+    flex-grow: 1;
+}
+
+.author-name {
+    font-weight: bold;
+    color: #333;
+}
+.dorado{
+    border:2px solid rgba(117, 91, 193, 0.92) !important;
+  }
+  .community-divider {
+    width: 100%;
+    border: 1px solid rgba(117, 91, 193, 0.92);
+    height: 1px;
+    background: #ddd;
+    margin: 10px 0;
+  }
+</style>
