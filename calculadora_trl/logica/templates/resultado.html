@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2 class="mb-4">Resultado de tecnología según el modelo {{ modelo.nombre }} ({{ modelo.get_tipo_display }})</h2>
+    <h3>
+        Nivel alcanzado:
+        {% if nivel.numero == 1 %}
+            <img src="{% static 'images/first.svg' %}" alt="Icono" class="mx-2" style="width: auto; height: 45px;">
+        {% elif nivel.numero == 2 %}
+            <img src="{% static 'images/second.svg' %}" alt="Icono" class="mx-2" style="width: auto; height: 45px;">
+        {% elif nivel.numero == 3 %}
+            <img src="{% static 'images/third.svg' %}" alt="Icono" class="mx-2" style="width: auto; height: 45px;">
+        {% elif nivel.numero == 4 %}
+            <img src="{% static 'images/fourth.svg' %}" alt="Icono" class="mx-2" style="width: auto; height: 45px;">
+        {% elif nivel.numero == 5 %}
+            <img src="{% static 'images/fifth.svg' %}" alt="Icono" class="mx-2" style="width: auto; height: 45px;">
+        {% elif nivel.numero == 6 %}
+            <img src="{% static 'images/sixth.svg' %}" alt="Icono" class="mx-2" style="width: auto; height: 45px;">
+        {% elif nivel.numero == 7 %}
+            <img src="{% static 'images/seventh.svg' %}" alt="Icono" class="mx-2" style="width: auto; height: 45px;">
+        {% elif nivel.numero == 8 %}
+            <img src="{% static 'images/eighth.svg' %}" alt="Icono" class="mx-2" style="width: auto; height: 45px;">
+        {% elif nivel.numero == 9 %}
+            <img src="{% static 'images/ninth.svg' %}" alt="Icono" class="mx-2" style="width: auto; height: 45px;">
+        {% endif %}
+        - {{ nivel.nombre }}
+    </h3>
+    <p>{{ nivel.descripcion|linebreaks|safe }}</p>
+    <a href="{% url 'seleccionar_modelo' %}" class="btn btn-primary mt-3">Volver al inicio</a>
+</div>
+{% endblock %}

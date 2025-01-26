@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <form action="{% url 'calcular_resultado' %}" method="post" id="preguntasForm">
+        {% csrf_token %}
+        <input type="hidden" name="modelo" value="{{ modelo.nombre }}">
+        <div id="preguntaContainer">
+            {% for pregunta in preguntas %}
+            <div class="pregunta mb-4" id="pregunta_{{ pregunta.id }}" {% if not forloop.first %}style="display: none;"{% endif %}>
+                <h3 class="mb-3"><b>Pregunta {{pregunta.numero}}:</b> {{ pregunta.texto|linebreaksbr|safe }}</h3>
+                {% for respuesta in pregunta.respuesta_set.all %}
+                <div class="form-check d-flex justify-content-center mb-2">
+                    <input class="form-check-input" type="radio" name="pregunta_{{ pregunta.id }}" id="respuesta_{{ respuesta.id }}" value="{{ respuesta.id }}" required>
+                    <label class="form-check-label ml-2" for="respuesta_{{ respuesta.id }}">
+                        {{ respuesta.texto|linebreaks|safe }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-primary mt-3 mx-2" id="siguiente" {% if preguntas.count == 1 %}style="display: none;"{% endif %} disabled>Siguiente</button>
+            <button type="submit" class="btn btn-success mt-3 mx-2" id="finalizar" {% if preguntas.count > 1 %}style="display: none;"{% endif %} disabled>Finalizar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const preguntas = document.querySelectorAll('.pregunta');
+    let preguntaActual = 0;
+
+    function mostrarSiguientePregunta() {
+        preguntas[preguntaActual].style.display = 'none';
+        preguntaActual++;
+        if (preguntaActual < preguntas.length) {
+            preguntas[preguntaActual].style.display = 'block';
+            if (preguntaActual === preguntas.length - 1) {
+                document.getElementById('siguiente').style.display = 'none';
+                document.getElementById('finalizar').style.display = 'inline-block';
+            }
+        }
+    }
+
+    document.querySelectorAll('input').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.getElementById('siguiente').disabled = false;
+            if (preguntaActual === preguntas.length - 1) {
+                document.getElementById('finalizar').disabled = false;
+            }
+        });
+    });
+
+    document.getElementById('siguiente').addEventListener('click', function() {
+        const preguntaActualElement = preguntas[preguntaActual];
+        const respuestaSeleccionada = preguntaActualElement.querySelector('input[type="radio"]:checked');
+        if (respuestaSeleccionada) {
+            mostrarSiguientePregunta();
+        } else {
+            alert('Por favor, selecciona una respuesta antes de continuar.');
+        }
+    });
+
+    document.getElementById('preguntasForm').addEventListener('submit', function(e) {
+        const ultimaPregunta = preguntas[preguntas.length - 1];
+        const respuestaSeleccionada = ultimaPregunta.querySelector('input[type="radio"]:checked');
+        if (!respuestaSeleccionada) {
+            e.preventDefault();
+            alert('Por favor, selecciona una respuesta antes de finalizar.');
+        }
+    });
+</script>
+{% endblock %}

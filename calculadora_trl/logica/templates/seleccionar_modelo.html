@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4" style="height: 100%; width: 100%;">
+    <h2 class="text-center mb-4">Seleccione un modelo</h2>
+    <form action="{% url 'preguntas' %}" method="post">
+        {% csrf_token %}
+        <div class="row justify-content-center">
+            {% for modelo in modelos %}
+            <div class="col-12 col-sm-6 col-md-4 mb-3">
+                <div class="form-check d-flex justify-content-center position-relative">
+                    <input class="form-check-input" type="radio" name="modelo" id="{{ modelo.nombre }}" value="{{ modelo.nombre }}">
+                    <label class="form-check-label ml-2" for="{{ modelo.nombre }}">
+                        {{ modelo.nombre }} ({{ modelo.get_tipo_display }})
+                    </label>
+                    <div class="text-muted info-box position-absolute p-2 bg-light border rounded" style="display:none; top: 100%; left: 60%; transform: translateX(-50%); z-index: 1">
+                        {{ modelo.descripcion|linebreaks|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <hr style="color:rgba(117, 91, 193, 0.92);">
+        <div class="text-center mb-3">
+            <button type="submit" class="btn btn-primary mt-3" id="continuar" disabled>Continuar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.querySelectorAll('.form-check').forEach(item => {
+        item.addEventListener('mouseover', function() {
+            this.querySelector('.info-box').style.display = 'block';
+        });
+        item.addEventListener('mouseout', function() {
+            this.querySelector('.info-box').style.display = 'none';
+        });
+    });
+
+    document.querySelectorAll('input[name="modelo"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.getElementById('continuar').disabled = false;
+        });
+    });
+</script>
+{% endblock %}
