@@ -20,7 +20,7 @@ sudo bash script.sh # introduzca la contraseña de administrador del sistema y a
 ## Ejecutar servidor:
 ```
 cd calculadora_trl
-python manage.py runserver
+python3 manage.py runserver
 ```
 
 
